@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="CircuitForge — build and test simple DC circuits in your browser.">
+  <title>CircuitForge</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">CF</span><div><strong>CircuitForge</strong><small>DC circuit sandbox</small></div></div>
+    <div class="project-name"><span class="status-dot"></span><input id="projectName" value="Untitled circuit" aria-label="Project name"></div>
+    <div class="actions">
+      <button id="newBtn" class="ghost">New</button><button id="saveBtn" class="ghost">Save</button><button id="loadBtn" class="ghost">Load</button>
+      <button id="runBtn" class="run"><span>▶</span> Run simulation</button>
+    </div>
+  </header>
+  <main class="shell">
+    <aside class="library panel">
+      <div class="panel-head"><span>Components</span><small>Click or drag to add</small></div>
+      <div class="component-list" id="componentList">
+        <button draggable="true" data-type="battery"><span class="symbol battery-symbol">＋ ┃ −</span><span><b>Battery</b><small>DC voltage source</small></span></button>
+        <button draggable="true" data-type="resistor"><span class="symbol">〰</span><span><b>Resistor</b><small>Limits current</small></span></button>
+        <button draggable="true" data-type="led"><span class="symbol led-symbol">▷⌁</span><span><b>LED</b><small>Light-emitting diode</small></span></button>
+        <button draggable="true" data-type="switch"><span class="symbol">／</span><span><b>Switch</b><small>Opens the circuit</small></span></button>
+      </div>
+      <div class="tip"><span>i</span><p><b>Quick start</b><br>Add one battery and at least one load, then connect every terminal into a loop.</p></div>
+    </aside>
+    <section class="workspace-wrap">
+      <div class="workspace-toolbar">
+        <div><button id="selectTool" class="active">↖ Select</button><button id="wireTool">⌁ Wire</button><button id="deleteBtn">⌫ Delete</button></div>
+        <div class="zoom"><button id="zoomOut">−</button><span id="zoomLabel">100%</span><button id="zoomIn">＋</button><button id="fitBtn">Fit</button></div>
+      </div>
+      <div id="workspace" class="workspace" tabindex="0" aria-label="Circuit workspace">
+        <div class="grid"></div><svg id="wireLayer" aria-hidden="true"></svg><div id="componentLayer"></div>
+        <div id="emptyState" class="empty-state"><div>⌁</div><h2>Build your first circuit</h2><p>Drag components here, then connect their terminals.</p><button id="exampleBtn">Load starter circuit</button></div>
+      </div>
+      <div class="bottom-strip"><span><i class="legend-dot power"></i> Power</span><span><i class="legend-dot load"></i> Load</span><span><i class="legend-line"></i> Wire</span><span class="shortcut">Del remove · Esc cancel wire · Double-click switch</span></div>
+    </section>
+    <aside class="inspector panel">
+      <div class="panel-head"><span>Inspector</span><small id="selectionLabel">Nothing selected</small></div>
+      <div id="inspectorEmpty" class="inspector-empty"><div>◇</div><p>Select a component to edit its properties.</p></div>
+      <form id="propertyForm" class="property-form hidden">
+        <label>Label<input id="propLabel" maxlength="24"></label>
+        <label id="valueRow"><span id="valueTitle">Value</span><div class="input-unit"><input id="propValue" type="number" min="0" step="0.1"><span id="propUnit">Ω</span></div></label>
+        <label id="stateRow" class="toggle-row">Closed <input id="propState" type="checkbox"><span></span></label>
+        <div class="stats"><div><span>Voltage</span><b id="statVoltage">—</b></div><div><span>Current</span><b id="statCurrent">—</b></div><div><span>Power</span><b id="statPower">—</b></div></div>
+      </form>
+      <div class="results">
+        <div class="results-head"><span>Simulation</span><span id="simBadge" class="badge idle">IDLE</span></div>
+        <div id="simMessage" class="sim-message"><span>○</span><p>Add components and close the loop to calculate the circuit.</p></div>
+        <div id="summary" class="summary hidden"><div><span>Total voltage</span><b id="totalV"></b></div><div><span>Total resistance</span><b id="totalR"></b></div><div><span>Loop current</span><b id="totalI"></b></div></div>
+      </div>
+    </aside>
+  </main>
+  <div id="toast" class="toast" role="status"></div>
+  <div id="loadModal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-card"><div class="modal-head"><h2>Saved projects</h2><button id="closeModal">×</button></div><div id="savedList"></div></div></div>
+  <script src="app.js"></script>
+</body>
+</html>
